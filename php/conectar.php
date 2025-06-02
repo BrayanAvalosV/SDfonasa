@@ -1,6 +1,6 @@
 <?php
 function conectarSQL($bd) {
-    $server = "LAPTOP-G1CBA8VT";//cambiar si es desde otro pc
+    $server = "192.168.191.194";//cambiar si es desde otro pc
 
     $connectionInfo = [
         "Database" => $bd,
