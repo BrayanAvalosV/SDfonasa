@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio - FONASA Regional</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+   <header>
+    <div class="logo">
+      <img src="Logo_de_Fonasa-removebg-preview.png" alt="Logo FONASA" />
+    </div>
+    <nav class="nav-bar">
+      <a href="index.html">Inicio</a>
+      <a href="comprar-bono.html">Comprar Bono</a>
+      <a href="mis-bonos.html"> Mis Bonos</a>
+      <a href="afiliacion.html"> Afiliación</a>
+      <div class="user-info">
+        <span id="user-nombre">
+          <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Usuario" class="user-icon"> admin
+        </span>
+        <button onclick="cerrarSesion()">Cerrar sesión</button>
+        <button id="btn-toggle-conexion">🔌</button>
+        <span id="status-indicator" class="status online">🟢 Online</span>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section style="text-align: center;">
+      <h2>Bienvenido al Sistema Regional FONASA</h2>
+      <p>Gestiona tus bonos, revisa tu historial y mantente informado sobre cómo opera el sistema ante caídas del servidor.</p>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; padding: 30px;">
+      <a href="comprar-bono.html" style="text-decoration: none;">
+        <div class="card">
+          <img src="https://cdn-icons-png.flaticon.com/512/609/609803.png" alt="Comprar bono" style="width: 60px; margin-bottom: 10px;">
+          <h3>Comprar Bono</h3>
+          <p>Simula la emisión de bonos por región, incluso en modo offline.</p>
+        </div>
+      </a>
+      <a href="mis-bonos.html" style="text-decoration: none;">
+        <div class="card">
+          <img src="https://cdn-icons-png.flaticon.com/512/942/942748.png" alt="Historial" style="width: 60px; margin-bottom: 10px;">
+          <h3>Mis Bonos</h3>
+          <p>Revisa tus bonos sincronizados y pendientes por región.</p>
+        </div>
+      </a>
+      <a href="afiliacion.html" style="text-decoration: none;">
+        <div class="card">
+          <img src="https://cdn-icons-png.flaticon.com/512/1828/1828673.png" alt="Afiliación" style="width: 60px; margin-bottom: 10px;">
+          <h3>Afiliación</h3>
+          <p>¿No estás afiliado? Revisa requisitos y documentación necesaria.</p>
+        </div>
+      </a>
+    </section>
+
+    <section style="padding: 0 30px;">
+      <h2>Instructivos y materiales de apoyo</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px;">
+        <img src="afiliarse.png" alt="Cómo afiliarse a Fonasa" style="max-width: 400px; border-radius: 10px;">
+        <img src="bono-fonasa-online-datos.jpeg__1440x2000_q70_subsampling-2.png" alt="Guía para comprar bono Fonasa" style="max-width: 400px; border-radius: 10px;">
+        <img src="beneficio.png" alt="Beneficios Fonasa para niños" style="max-width: 400px; border-radius: 10px;">
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Proyecto académico - Sistemas Distribuidos | Universidad de La Serena &copy; 2025</p>
+    <div style="margin-top: 10px;">
+      <label for="selector-region"><strong>Región activa:</strong></label>
+      <select id="selector-region" onchange="cambiarRegion()" style="margin-left: 10px; padding: 5px; border-radius: 5px;">
+        <option value="Coquimbo/La Serena">Coquimbo / La Serena</option>
+        <option value="Santiago">Santiago</option>
+        <option value="Temuco">Temuco</option>
+      </select>
+    </div>
+  </footer>
+
+  <script>
+    const usuario = localStorage.getItem("usuario");
+    if (!usuario) window.location.href = "login.html";
+    else document.getElementById("user-nombre").innerHTML =
+      `<img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon"> ${usuario}`;
+
+    const regionSelect = document.getElementById("selector-region");
+    const regionGuardada = localStorage.getItem("regionActual") || "Coquimbo";
+    regionSelect.value = regionGuardada;
+
+    function cambiarRegion() {
+      const nuevaRegion = regionSelect.value;
+      localStorage.setItem("regionActual", nuevaRegion);
+      alert(`🌍 Región activa cambiada a: ${nuevaRegion}`);
+    }
+
+    function cerrarSesion() {
+      localStorage.removeItem("usuario");
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <style>
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+    .card h3 {
+      margin: 10px 0;
+      color: #1c2833;
+    }
+    .card p {
+      color: #333;
+      font-size: 14px;
+    }
+  </style>
+  <script src="js/estadoConexion.js"></script>
+</body>
+</html>

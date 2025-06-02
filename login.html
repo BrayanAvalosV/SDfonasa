@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - FONASA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+  <div class="login-container">
+    <div class="login-header">
+      <img src="Logo_de_Fonasa-removebg-preview.png" alt="Logo FONASA" class="login-logo">
+      <h2>Iniciar sesión</h2>
+      <p>Sistema regional de bonos FONASA</p>
+    </div>
+
+    <form id="form-login">
+      <input type="text" id="usuario" placeholder="Usuario (RUT)" required>
+      <input type="password" id="clave" placeholder="Contraseña" required>
+      <button type="submit">Ingresar</button>
+    </form>
+
+    <p id="error" class="error-text oculto">Credenciales incorrectas</p>
+
+    <p style="margin-top: 15px; text-align: center;">
+      ¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a>
+    </p>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>

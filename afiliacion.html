@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Afiliación - FONASA</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+   <header>
+    <div class="logo">
+      <img src="Logo_de_Fonasa-removebg-preview.png" alt="Logo FONASA" />
+    </div>
+    <nav class="nav-bar">
+  <a href="index.html">Inicio</a>
+  <a href="comprar-bono.html">Comprar Bono</a>
+  <a href="mis-bonos.html"> Mis Bonos</a>
+  <a href="afiliacion.html"> Afiliación</a>
+    <div class="user-info">
+      <span id="user-nombre">
+        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Usuario" class="user-icon"> admin
+      </span>
+      <button onclick="cerrarSesion()">Cerrar sesión</button>
+      <button id="btn-toggle-conexion">🔌</button>
+      <span id="status-indicator" class="status online">🟢 Online</span>
+    </div>
+    
+</nav>
+
+  </header>
+
+  <main>
+    <h2>¿Cómo afiliarse a FONASA?</h2>
+    <p>Para afiliarse a Fonasa, el interesado debe cumplir con uno de estos criterios:</p>
+    <ul>
+      <li>Ser trabajador dependiente o independiente.</li>
+      <li>Ser pensionado, beneficiario de subsidio o cargas familiares.</li>
+      <li>Ser menor de 18 años sin previsión o estudiante hasta los 24 años.</li>
+    </ul>
+
+    <p>Además, deberá presentar los siguientes documentos:</p>
+    <ul>
+      <li>Cédula de identidad vigente.</li>
+      <li>Comprobante de domicilio.</li>
+      <li>Documentación laboral o certificado de alumno regular, según corresponda.</li>
+    </ul>
+
+    <img src="Logo_de_Fonasa-removebg-preview.png" alt="Logo FONASA" />
+  </main>
+
+  <footer>
+  <p>Proyecto académico - Sistemas Distribuidos | Universidad de La Serena &copy; 2025</p>
+  <div style="margin-top: 10px;">
+    <label for="selector-region"><strong>Región activa:</strong></label>
+    <select id="selector-region" onchange="cambiarRegion()" style="margin-left: 10px; padding: 5px; border-radius: 5px;">
+      <option value="Coquimbo/La Serena">Coquimbo / La Serena</option>
+      <option value="Santiago">Santiago</option>
+      <option value="Temuco">Temuco</option>
+    </select>
+  </div>
+</footer>
+
+
+  <script>
+    const usuario = localStorage.getItem("usuario");
+    if (!usuario) window.location.href = "login.html";
+    else document.getElementById("user-nombre").innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon"> ${usuario}`;
+
+     // Selección de región
+  const regionSelect = document.getElementById("selector-region");
+  const regionGuardada = localStorage.getItem("regionActual") || "Coquimbo";
+  regionSelect.value = regionGuardada;
+
+  function cambiarRegion() {
+    const nuevaRegion = regionSelect.value;
+    localStorage.setItem("regionActual", nuevaRegion);
+    alert(`🌍 Región activa cambiada a: ${nuevaRegion}`);
+  }
+
+    function cerrarSesion() {
+      localStorage.removeItem("usuario");
+      window.location.href = "login.html";
+    }
+  </script>
+  <script src="js/estadoConexion.js"></script>
+</body>
+</html>

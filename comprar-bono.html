@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comprar Bono - FONASA</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="Logo_de_Fonasa-removebg-preview.png" alt="Logo FONASA" />
+    </div>
+    <nav class="nav-bar">
+      <a href="index.html">Inicio</a>
+      <a href="comprar-bono.html">Comprar Bono</a>
+      <a href="mis-bonos.html"> Mis Bonos</a>
+      <a href="afiliacion.html"> Afiliación</a>
+      <div class="user-info">
+        <span id="user-nombre">
+          <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Usuario" class="user-icon"> admin
+        </span>
+        <button onclick="cerrarSesion()">Cerrar sesión</button>
+        <button id="btn-toggle-conexion">🔌</button>
+        <span id="status-indicator" class="status online">🟢 Online</span>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Compra de Bono</h2>
+    <form id="form-bono" class="formulario">
+      <label>RUT del Paciente:</label>
+      <input id="rutPaciente" type="text" placeholder="Ej: 12345678-9" required>
+
+      <label>RUT del Prestador:</label>
+      <input id="rutPrestador" type="text" placeholder="Ej: 98765432-1" required>
+
+      <label>Código de Prestación:</label>
+      <input id="codigoPrestacion" type="text" placeholder="Ej: 0301012" required>
+
+      <label>Centro de Atención:</label>
+      <select id="centroAtencion" required>
+        <option disabled selected>Seleccione un centro</option>
+        <option>Hospital Regional</option>
+        <option>Clínica Andes Salud</option>
+        <option>Centro Médico La Serena</option>
+      </select>
+
+      <label>Fecha de atención:</label>
+      <input id="fechaAtencion" type="date" required>
+
+      <button type="submit">Generar Bono</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>Proyecto académico - Sistemas Distribuidos | Universidad de La Serena &copy; 2025</p>
+    <div style="margin-top: 10px;">
+      <label for="selector-region"><strong>Región activa:</strong></label>
+      <select id="selector-region" onchange="cambiarRegion()" style="margin-left: 10px; padding: 5px; border-radius: 5px;">
+        <option value="Coquimbo">Coquimbo / La Serena</option>
+        <option value="Santiago">Santiago</option>
+        <option value="Temuco">Temuco</option>
+      </select>
+    </div>
+  </footer>
+
+  <script>
+    let conectado = true;
+
+    function toggleConexion() {
+      conectado = !conectado;
+      const status = document.getElementById("status-indicator");
+      status.textContent = conectado ? "🟢 Online" : "🔴 Offline";
+      status.className = conectado ? "status online" : "status offline";
+    }
+
+   document.getElementById("form-bono").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const region = localStorage.getItem("regionActual") || "Coquimbo";
+  const conectado = localStorage.getItem(`conectado_${region}`) === "true";
+
+  const datos = new FormData();
+  datos.append("rut_paciente", document.getElementById("rutPaciente").value);
+  datos.append("rut_prestador", document.getElementById("rutPrestador").value);
+  datos.append("codigo_prestacion", document.getElementById("codigoPrestacion").value);
+  datos.append("centro_atencion", document.getElementById("centroAtencion").value);
+  datos.append("fecha_atencion", document.getElementById("fechaAtencion").value);
+  datos.append("region", region);
+
+  if (!conectado) {
+    let pendientes = JSON.parse(localStorage.getItem("bonosPendientes")) || [];
+    pendientes.push({
+      rut_paciente: datos.get("rut_paciente"),
+      rut_prestador: datos.get("rut_prestador"),
+      codigo_prestacion: datos.get("codigo_prestacion"),
+      centro_atencion: datos.get("centro_atencion"),
+      fecha_atencion: datos.get("fecha_atencion"),
+      region: region,
+      estado: "Pendiente"
+    });
+    localStorage.setItem("bonosPendientes", JSON.stringify(pendientes));
+    alert("✅ Bono guardado en modo Offline (pendiente de sincronizar).");
+    this.reset();
+    return;
+  }
+
+  // Online: sincroniza bonos pendientes de esta región antes de guardar el nuevo
+  await sincronizarBonos(region);
+
+  try {
+    const response = await fetch("php/guardar_bono.php", {
+      method: "POST",
+      body: datos
+    });
+    const resultado = await response.json();
+
+    if (resultado.exito) {
+      alert("✅ Bono guardado exitosamente en base de datos.");
+      this.reset();
+    } else {
+      alert("❌ Error: " + resultado.mensaje);
+    }
+  } catch (error) {
+    alert("❌ Error de conexión con el servidor.");
+  }
+});
+
+
+    const usuario = localStorage.getItem("usuario");
+    if (!usuario) window.location.href = "login.html";
+    else document.getElementById("user-nombre").innerHTML = `
+      <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon"> ${usuario}`;
+
+    // Selección de región
+    const regionSelect = document.getElementById("selector-region");
+    const regionGuardada = localStorage.getItem("regionActual") || "Coquimbo";
+    regionSelect.value = regionGuardada;
+
+    function cambiarRegion() {
+      const nuevaRegion = regionSelect.value;
+      localStorage.setItem("regionActual", nuevaRegion);
+      alert(`🌍 Región activa cambiada a: ${nuevaRegion}`);
+    }
+
+    function cerrarSesion() {
+      localStorage.removeItem("usuario");
+      window.location.href = "login.html";
+    }
+  </script>
+  <script src="js/estadoConexion.js"></script>
+</body>
+</html>
