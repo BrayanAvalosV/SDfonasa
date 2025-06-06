@@ -14,7 +14,7 @@ if (!$rut_paciente || !$rut_prestador || !$codigo_prestacion || !$centro_atencio
     exit;
 }
 //cambiar aqui
-$conn = conectarSQL("BD_Usuarios");
+$conn = conectarSQL("BD_Coquimbo");
 
 if (!$conn) {
     echo json_encode(['exito' => false, 'mensaje' => 'No se pudo conectar a la base regional']);

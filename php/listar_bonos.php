@@ -11,7 +11,7 @@ if (!$rut) {
 $regiones = ['Coquimbo', 'Santiago', 'Temuco'];
 $bonos = [];
 
-$conn = conectarSQL("BD_Usuarios");
+$conn = conectarSQL("BD_Coquimbo");
 if ($conn) {
     foreach ($regiones as $region) {
         $sql = "SELECT id_bono, rut_paciente, rut_prestador, codigo_prestacion, centro_atencion, fecha_atencion, estado, region 

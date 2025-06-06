@@ -11,7 +11,7 @@ if (!$rut || !$nombre || !$clave) {
     exit;
 }
 
-$conn = conectarSQL("BD_Usuarios");
+$conn = conectarSQL("BD_Coquimbo");
 if (!$conn) {
     echo json_encode(['exito' => false, 'mensaje' => 'No se pudo conectar a la base de datos de usuarios']);
     exit;

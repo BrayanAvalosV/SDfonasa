@@ -10,7 +10,7 @@ if (!$rut || !$clave) {
     exit;
 }
 
-$conn = conectarSQL("BD_Usuarios");
+$conn = conectarSQL("BD_Coquimbo");
 if (!$conn) {
     echo json_encode(["exito" => false, "mensaje" => "Error de conexión a base de datos"]);
     exit;
